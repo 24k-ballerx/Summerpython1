@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}Courses - Somerset College Portal{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div class="container">
+        <h1>Course Catalog</h1>
+        <p>Explore our comprehensive course offerings at Someret College</p>
+    </div>
+</div>
+
+<div class="courses-section">
+    <div class="container">
+        <div class="courses-grid">
+            {% for course in courses %}
+            <div class="course-card">
+                <div class="course-header">
+                    <div class="course-icon">
+                        <i class="fas fa-book"></i>
+                    </div>
+                    <div class="course-title">
+                        <h3>{{ course.name }}</h3>
+                        <p class="course-teacher">Instructor: {{ course.teacher }}</p>
+                    </div>
+                </div>
+                <div class="course-details">
+                    <div class="course-stat">
+                        <i class="fas fa-graduation-cap"></i>
+                        <span>{{ course.credits }} Credits</span>
+                    </div>
+                    <div class="course-stat">
+                        <i class="fas fa-users"></i>
+                        <span>{{ course.students }} Students</span>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+

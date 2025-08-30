@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block title %}Announcements - Somerset College Portal{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div class="container">
+        <h1>Announcements</h1>
+        <p>Stay updated with the latest news and events at Somerset College</p>
+    </div>
+</div>
+
+<div class="announcements-page-section">
+    <div class="container">
+        <div class="announcements-list">
+            {% for announcement in announcements %}
+            <div class="announcement-item">
+                <div class="announcement-header">
+                    <h3>{{ announcement.title }}</h3>
+                    <span class="announcement-date">{{ announcement.date }}</span>
+                </div>
+                <div class="announcement-content">
+                    <p>{{ announcement.content }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+

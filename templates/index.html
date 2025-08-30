@@ -1,0 +1,57 @@
+{% extends "public_base.html" %}
+
+{% block title %}Somerset College — Welcome{% endblock %}
+
+{% block nav_right %}{% endblock %}
+
+{% block content %}
+<section class="hero-section">
+	<div class="hero-content">
+		<h1>Somerset College</h1>
+		<p>Education a Life Pivot</p>
+		<div class="hero-buttons">
+			<a href="{{ url_for('signin') }}" class="btn btn-primary">Enter Portal</a>
+			<a href="{{ url_for('courses_page') }}" class="btn btn-secondary">Explore Courses</a>
+		</div>
+	</div>
+</section>
+
+<section class="features-section">
+	<div class="container">
+		<h2 class="section-title">Discover Our Community</h2>
+		<div class="features-grid">
+			<div class="feature-card">
+				<div class="feature-icon">
+					<i class="fas fa-graduation-cap"></i>
+				</div>
+				<h3>Quality Teaching</h3>
+				<p>Learn from experienced and dedicated educators.</p>
+			</div>
+			<div class="feature-card">
+				<div class="feature-icon">
+					<i class="fas fa-laptop-code"></i>
+				</div>
+				<h3>Modern Resources</h3>
+				<p>Access state-of-the-art labs and digital tools.</p>
+			</div>
+			<div class="feature-card">
+				<div class="feature-icon">
+					<i class="fas fa-people-group"></i>
+				</div>
+				<h3>Vibrant Community</h3>
+				<p>Join clubs, activities, and events that inspire.</p>
+			</div>
+		</div>
+	</div>
+</section>
+
+<section class="cta-section">
+	<div class="container text-center">
+		<h2>Ready to get started?</h2>
+		<p>Sign in to access your personalized portal.</p>
+		<a href="{{ url_for('signin') }}" class="btn btn-primary">Sign In</a>
+	</div>
+</section>
+{% endblock %}
+
+

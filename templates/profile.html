@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+
+{% block title %}Profile - Somerset College Portal{% endblock %}
+
+{% block content %}
+<div class="profile-section">
+    <div class="container">
+        <div class="page-header">
+            <h1>User Profile</h1>
+            <p>Welcome to your personal profile page</p>
+        </div>
+        
+        <div class="profile-container">
+            <div class="profile-card">
+                <div class="profile-header">
+                    <div class="profile-avatar">
+                        {% if user_type == 'student' %}
+                            <i class="fas fa-user-graduate"></i>
+                        {% elif user_type == 'teacher' %}
+                            <i class="fas fa-chalkboard-teacher"></i>
+                        {% else %}
+                            <i class="fas fa-user-shield"></i>
+                        {% endif %}
+                    </div>
+                    <div class="profile-info">
+                        <h2>{{ user.name }}</h2>
+                        <p class="user-type">{{ user_type|title }}</p>
+                        <p class="user-id">User ID: {{ session.user_id }}</p>
+                    </div>
+                </div>
+                
+                <div class="profile-details">
+                    {% if user_type == 'student' %}
+                        <div class="detail-group">
+                            <h3>Student Information</h3>
+                            <div class="detail-item">
+                                <span class="detail-label">Grade:</span>
+                                <span class="detail-value">{{ user.grade }}</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">GPA:</span>
+                                <span class="detail-value">{{ user.gpa }}</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Email:</span>
+                                <span class="detail-value">{{ user.email }}</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Username:</span>
+                                <span class="detail-value">{{ user.username }}</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Courses:</span>
+                                <div class="courses-list">
+                                    {% for course in user.courses %}
+                                        <span class="course-tag">{{ course }}</span>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    {% elif user_type == 'teacher' %}
+                        <div class="detail-group">
+                            <h3>Teacher Information</h3>
+                            <div class="detail-item">
+                                <span class="detail-label">Subject:</span>
+                                <span class="detail-value">{{ user.subject }}</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Email:</span>
+                                <span class="detail-value">{{ user.email }}</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Username:</span>
+                                <span class="detail-value">{{ user.username }}</span>
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="detail-group">
+                            <h3>Administrator Information</h3>
+                            <div class="detail-item">
+                                <span class="detail-label">Role:</span>
+                                <span class="detail-value">System Administrator</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Access Level:</span>
+                                <span class="detail-value">Full Access</span>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+                
+                <div class="profile-actions">
+                    <a href="{{ url_for('home') }}" class="btn btn-primary">Back to Home</a>
+                    <a href="{{ url_for('logout') }}" class="btn btn-secondary">Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

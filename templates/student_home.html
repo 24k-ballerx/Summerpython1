@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block title %}My Class — Somerset College Portal{% endblock %}
+
+{% block content %}
+<div class="page-header">
+	<div class="container">
+		<h1>My Academic Overview</h1>
+		<p>Personalized details for your current session</p>
+	</div>
+</div>
+
+<section class="container">
+	<div class="card" style="margin-bottom: 1.5rem;">
+		<h2>Class</h2>
+		<p>{{ class_name }}</p>
+	</div>
+
+	<div class="card" style="margin-bottom: 1.5rem;">
+		<h2>Grade Point Average</h2>
+		<p>{{ gpa }}</p>
+	</div>
+
+	<div class="card" style="margin-bottom: 1.5rem;">
+		<h2>Subjects</h2>
+		<ul>
+			{% for subject in subjects %}
+			<li>{{ subject }}</li>
+			{% endfor %}
+		</ul>
+	</div>
+
+	<div class="card" style="margin-bottom: 1.5rem;">
+		<h2>Performance Statement</h2>
+		<p>{{ performance_statement }}</p>
+	</div>
+
+	<div class="card">
+		<h2>Class Teacher</h2>
+		{% if teacher %}
+		<p>{{ teacher.name }} — {{ teacher.subject }} (<a href="mailto:{{ teacher.email }}">{{ teacher.email }}</a>)</p>
+		{% else %}
+		<p>Not assigned</p>
+		{% endif %}
+	</div>
+</section>
+{% endblock %}
+
+
+
+
+
+

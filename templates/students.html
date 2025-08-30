@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+
+{% block title %}Students - Somerset College Portal{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div class="container">
+        <h1>Students Directory</h1>
+        <p>Meet our outstanding students at Somerset College</p>
+    </div>
+</div>
+
+<div class="students-section">
+    <div class="container">
+        <nav class="class-nav" style="margin-bottom: 16px; display: flex; gap: 10px; flex-wrap: wrap;">
+            <a class="btn btn-outline" href="{{ url_for('students_page') }}">All</a>
+            {% for c in classes %}
+            <a class="btn btn-outline" href="{{ url_for('students_page') }}?grade={{ c }}{% if q %}&q={{ q }}{% endif %}">{{ c }}</a>
+            {% endfor %}
+        </nav>
+        <form method="get" class="students-search" style="margin-bottom: 20px; display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
+            <input type="text" name="q" value="{{ q or '' }}" placeholder="Search by name or username" style="padding: 10px; min-width: 240px;">
+            <select name="grade" style="padding: 10px;">
+                <option value="">All Grades</option>
+                {% for c in classes %}
+                <option value="{{ c }}" {% if grade == c %}selected{% endif %}>{{ c }}</option>
+                {% endfor %}
+            </select>
+            <button type="submit" class="btn btn-primary">Search</button>
+        </form>
+        {% if grade %}
+        <p style="margin-bottom: 16px;">{{ students|length }} result{% if students|length != 1 %}s{% endif %}</p>
+        <div class="students-grid">
+            {% if students and students|length > 0 %}
+                {% for student in students %}
+                <div class="student-card">
+                    <div class="student-avatar">
+                        <i class="fas fa-user-graduate"></i>
+                    </div>
+                    <div class="student-info">
+                        <h3>{{ student.name }}</h3>
+                        <p class="student-grade">{{ student.grade }} Grade</p>
+                        <p class="student-gpa">GPA: {{ student.gpa }}</p>
+                        <div class="student-courses">
+                            <h4>Courses:</h4>
+                            <ul>
+                                {% for course in student.courses %}
+                                <li>{{ course }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <p>No students found. Try a different search.</p>
+            {% endif %}
+        </div>
+        {% else %}
+        {% for c in classes %}
+            {% set class_students = students | selectattr('grade', 'equalto', c) | list %}
+            <h2 style="margin-top: 24px;">{{ c }} <span style="font-weight: normal; color: #666;">({{ class_students|length }})</span></h2>
+            <div class="students-grid">
+                {% if class_students and class_students|length > 0 %}
+                    {% for student in class_students %}
+                    <div class="student-card">
+                        <div class="student-avatar">
+                            <i class="fas fa-user-graduate"></i>
+                        </div>
+                        <div class="student-info">
+                            <h3>{{ student.name }}</h3>
+                            <p class="student-grade">{{ student.grade }} Grade</p>
+                            <p class="student-gpa">GPA: {{ student.gpa }}</p>
+                            <div class="student-courses">
+                                <h4>Courses:</h4>
+                                <ul>
+                                    {% for course in student.courses %}
+                                    <li>{{ course }}</li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <p>No students in this class.</p>
+                {% endif %}
+            </div>
+        {% endfor %}
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

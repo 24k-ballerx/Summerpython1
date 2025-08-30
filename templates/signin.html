@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block title %}Sign In - Somerset College Portal{% endblock %}
+
+{% block content %}
+<div class="signin-section">
+    <div class="container">
+        <div class="signin-container">
+            <div class="signin-card">
+                <div class="signin-header">
+                    <i class="fas fa-graduation-cap"></i>
+                    <h2>Welcome to Somerset College</h2>
+                    <p>Choose your role to access your personalized dashboard</p>
+                </div>
+                
+                <div class="role-selection">
+                    <div class="role-card" onclick="selectRole('admin')">
+                        <div class="role-icon">
+                            <i class="fas fa-user-shield"></i>
+                        </div>
+                        <h3>Administrator</h3>
+                        <p>Full system access and management</p>
+                        <div class="role-features">
+                            <span><i class="fas fa-check"></i> Manage Students</span>
+                            <span><i class="fas fa-check"></i> Manage Teachers</span>
+                            <span><i class="fas fa-check"></i> System Settings</span>
+                        </div>
+                    </div>
+                    
+                    <div class="role-card" onclick="selectRole('teacher')">
+                        <div class="role-icon">
+                            <i class="fas fa-chalkboard-teacher"></i>
+                        </div>
+                        <h3>Teacher</h3>
+                        <p>Course management and student progress</p>
+                        <div class="role-features">
+                            <span><i class="fas fa-check"></i> View Courses</span>
+                            <span><i class="fas fa-check"></i> Student Progress</span>
+                            <span><i class="fas fa-check"></i> Grade Management</span>
+                        </div>
+                    </div>
+                    
+                    <div class="role-card" onclick="selectRole('student')">
+                        <div class="role-icon">
+                            <i class="fas fa-user-graduate"></i>
+                        </div>
+                        <h3>Student</h3>
+                        <p>Course access and academic progress</p>
+                        <div class="role-features">
+                            <span><i class="fas fa-check"></i> View Courses</span>
+                            <span><i class="fas fa-check"></i> Check Grades</span>
+                            <span><i class="fas fa-check"></i> Academic Progress</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="signin-actions">
+                    <a href="{{ url_for('home') }}" class="btn btn-secondary">Back to Home</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function selectRole(role) {
+    // Store the selected role in sessionStorage
+    sessionStorage.setItem('selectedRole', role);
+    
+    // Redirect to login page
+    window.location.href = "{{ url_for('login') }}";
+}
+</script>
+{% endblock %}

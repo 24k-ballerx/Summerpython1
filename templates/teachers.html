@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}Teachers - Somerset College Portal{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div class="container">
+        <h1>Faculty Directory</h1>
+        <p>Meet our dedicated teachers at Someret College</p>
+    </div>
+</div>
+
+<div class="teachers-section">
+    <div class="container">
+        <div class="teachers-grid">
+            {% for teacher in teachers %}
+            <div class="teacher-card">
+                <div class="teacher-avatar">
+                    <i class="fas fa-chalkboard-teacher"></i>
+                </div>
+                <div class="teacher-info">
+                    <h3>{{ teacher.name }}</h3>
+                    <p class="teacher-subject">{{ teacher.subject }}</p>
+                    <p class="teacher-email">
+                        <i class="fas fa-envelope"></i>
+                        <a href="mailto:{{ teacher.email }}">{{ teacher.email }}</a>
+                    </p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+

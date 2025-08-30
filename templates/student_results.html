@@ -1,0 +1,200 @@
+{% extends "base.html" %}
+
+{% block title %}Semester Results - {{ student.name }} - Somerset College Portal{% endblock %}
+
+{% block content %}
+<div class="results-section">
+    <div class="container">
+        <div class="results-header">
+            <h1>Semester Results</h1>
+            <p>{{ results.semester }} - {{ student.name }}</p>
+        </div>
+        
+        <!-- Overall Performance Summary -->
+        <div class="performance-summary">
+            <div class="summary-card">
+                <div class="summary-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <div class="summary-info">
+                    <h3>Overall GPA</h3>
+                    <p class="gpa-score">{{ results.overall_gpa }}</p>
+                    <span class="gpa-scale">/ 4.0</span>
+                </div>
+            </div>
+            
+            <div class="summary-card">
+                <div class="summary-icon">
+                    <i class="fas fa-graduation-cap"></i>
+                </div>
+                <div class="summary-info">
+                    <h3>Total Credits</h3>
+                    <p class="credits-score">{{ results.total_credits }}</p>
+                    <span class="credits-label">Credits</span>
+                </div>
+            </div>
+            
+            <div class="summary-card">
+                <div class="summary-icon">
+                    <i class="fas fa-calendar-check"></i>
+                </div>
+                <div class="summary-info">
+                    <h3>Attendance Rate</h3>
+                    <p class="attendance-score">{{ results.performance_summary.attendance_rate }}%</p>
+                    <span class="attendance-label">Present</span>
+                </div>
+            </div>
+            
+            <div class="summary-card">
+                <div class="summary-icon">
+                    <i class="fas fa-tasks"></i>
+                </div>
+                <div class="summary-info">
+                    <h3>Assignments</h3>
+                    <p class="assignments-score">{{ results.performance_summary.assignments_completed }}/{{ results.performance_summary.total_assignments }}</p>
+                    <span class="assignments-label">Completed</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Course Results -->
+        <div class="course-results">
+            <h2>Course Results</h2>
+            <div class="courses-grid">
+                {% for course in results.courses %}
+                <div class="course-result-card">
+                    <div class="course-header">
+                        <div class="course-icon">
+                            <i class="fas fa-book"></i>
+                        </div>
+                        <div class="course-info">
+                            <h3>{{ course.name }}</h3>
+                            <p>{{ course.teacher }}</p>
+                            <span class="credits">{{ course.credits }} credits</span>
+                        </div>
+                        <div class="grade-badge grade-{{ course.grade.lower().replace('+', '-plus').replace('-', '-minus') }}">
+                            {{ course.grade }}
+                        </div>
+                    </div>
+                    
+                    <div class="course-performance">
+                        <div class="performance-bar">
+                            <div class="bar-label">Performance</div>
+                            <div class="progress-bar">
+                                <span class="progress" style="width: {{ course.percentage }}%"></span>
+                            </div>
+                            <div class="percentage">{{ course.percentage }}%</div>
+                        </div>
+                    </div>
+                    
+                    <div class="assignments-breakdown">
+                        <h4>Assignment Breakdown</h4>
+                        <div class="assignments-list">
+                            {% for assignment in course.assignments %}
+                            <div class="assignment-item">
+                                <div class="assignment-info">
+                                    <span class="assignment-name">{{ assignment.name }}</span>
+                                    <span class="assignment-weight">({{ assignment.weight }}%)</span>
+                                </div>
+                                <div class="assignment-score">
+                                    <span class="score">{{ assignment.score }}/{{ assignment.max_score }}</span>
+                                    <span class="percentage">({{ (assignment.score / assignment.max_score * 100) | round(1) }}%)</span>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        
+        <!-- Performance Analysis -->
+        <div class="performance-analysis">
+            <div class="analysis-grid">
+                <!-- Strengths -->
+                <div class="analysis-card strengths-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-star"></i> Strengths</h3>
+                    </div>
+                    <div class="card-content">
+                        <ul class="strengths-list">
+                            {% for strength in results.performance_summary.strengths %}
+                            <li><i class="fas fa-check-circle"></i> {{ strength }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Areas for Improvement -->
+                <div class="analysis-card improvement-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-lightbulb"></i> Areas for Improvement</h3>
+                    </div>
+                    <div class="card-content">
+                        <ul class="improvement-list">
+                            {% for area in results.performance_summary.improvement_areas %}
+                            <li><i class="fas fa-arrow-up"></i> {{ area }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- GPA Trend Chart -->
+        <div class="gpa-trend">
+            <div class="trend-card">
+                <div class="card-header">
+                    <h3><i class="fas fa-chart-area"></i> GPA Trend</h3>
+                </div>
+                <div class="card-content">
+                    <div class="trend-chart">
+                        <div class="chart-container">
+                            <div class="chart-bar" style="height: 75%">
+                                <span class="bar-label">Previous</span>
+                                <span class="bar-value">3.6</span>
+                            </div>
+                            <div class="chart-bar current" style="height: {{ (results.overall_gpa / 4.0) * 100 }}%">
+                                <span class="bar-label">Current</span>
+                                <span class="bar-value">{{ results.overall_gpa }}</span>
+                            </div>
+                            <div class="chart-bar" style="height: 80%">
+                                <span class="bar-label">Target</span>
+                                <span class="bar-value">3.8</span>
+                            </div>
+                        </div>
+                        <div class="chart-legend">
+                            <div class="legend-item">
+                                <span class="legend-color previous"></span>
+                                <span>Previous Semester</span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-color current"></span>
+                                <span>Current Semester</span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-color target"></span>
+                                <span>Target GPA</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Action Buttons -->
+        <div class="results-actions">
+            <a href="{{ url_for('dashboard') }}" class="btn btn-primary">
+                <i class="fas fa-tachometer-alt"></i> Back to Dashboard
+            </a>
+            <a href="{{ url_for('profile') }}" class="btn btn-secondary">
+                <i class="fas fa-user"></i> View Profile
+            </a>
+            <button class="btn btn-outline" onclick="window.print()">
+                <i class="fas fa-print"></i> Print Results
+            </button>
+        </div>
+    </div>
+</div>
+{% endblock %}

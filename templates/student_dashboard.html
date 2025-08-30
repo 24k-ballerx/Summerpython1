@@ -1,0 +1,200 @@
+{% extends "base.html" %}
+
+{% block title %}Student Dashboard - Somerset College Portal{% endblock %}
+
+{% block content %}
+<div class="dashboard-section">
+    <div class="container">
+        <div class="dashboard-header">
+            <h1>Student Dashboard</h1>
+            <p>Welcome back, {{ student.name }}! Track your academic progress</p>
+        </div>
+        
+        <div class="dashboard-stats">
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-book"></i>
+                </div>
+                <div class="stat-info">
+                    <h3>{{ student.courses|length }}</h3>
+                    <p>Enrolled Courses</p>
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <div class="stat-info">
+                    <h3>{{ student.gpa }}</h3>
+                    <p>Current GPA</p>
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-graduation-cap"></i>
+                </div>
+                <div class="stat-info">
+                    <h3>{{ student.grade }}</h3>
+                    <p>Grade Level</p>
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-bullhorn"></i>
+                </div>
+                <div class="stat-info">
+                    <h3>{{ announcements|length }}</h3>
+                    <p>Announcements</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="dashboard-content">
+            <div class="dashboard-grid">
+                <!-- My Courses -->
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-book"></i> My Courses</h3>
+                        <a href="{{ url_for('courses_page') }}" class="btn btn-primary btn-sm">View All</a>
+                    </div>
+                    <div class="card-content">
+                        <div class="course-list">
+                            {% for course in student.courses %}
+                            <div class="course-item">
+                                <div class="course-icon">
+                                    <i class="fas fa-graduation-cap"></i>
+                                </div>
+                                <div class="course-info">
+                                    <h4>{{ course }}</h4>
+                                    <p>Course Progress: <span class="progress-bar"><span class="progress" style="width: 75%"></span></span> 75%</p>
+                                    <div class="course-actions">
+                                        <button class="btn btn-secondary btn-sm">View Materials</button>
+                                        <button class="btn btn-primary btn-sm">Check Grades</button>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Academic Progress -->
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-chart-line"></i> Academic Progress</h3>
+                    </div>
+                    <div class="card-content">
+                        <div class="progress-summary">
+                            <div class="progress-item">
+                                <div class="progress-label">
+                                    <span>Overall GPA</span>
+                                    <span>{{ student.gpa }}/4.0</span>
+                                </div>
+                                <div class="progress-bar">
+                                    <span class="progress" style="width: {{ (student.gpa / 4.0) * 100 }}%"></span>
+                                </div>
+                            </div>
+                            
+                            <div class="progress-item">
+                                <div class="progress-label">
+                                    <span>Attendance</span>
+                                    <span>95%</span>
+                                </div>
+                                <div class="progress-bar">
+                                    <span class="progress" style="width: 95%"></span>
+                                </div>
+                            </div>
+                            
+                            <div class="progress-item">
+                                <div class="progress-label">
+                                    <span>Assignments Completed</span>
+                                    <span>12/15</span>
+                                </div>
+                                <div class="progress-bar">
+                                    <span class="progress" style="width: 80%"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Recent Announcements -->
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-bullhorn"></i> Recent Announcements</h3>
+                        <a href="{{ url_for('announcements_page') }}" class="btn btn-primary btn-sm">View All</a>
+                    </div>
+                    <div class="card-content">
+                        <div class="announcement-list">
+                            {% for announcement in announcements[:3] %}
+                            <div class="announcement-item">
+                                <div class="announcement-icon">
+                                    <i class="fas fa-info-circle"></i>
+                                </div>
+                                <div class="announcement-info">
+                                    <h4>{{ announcement.title }}</h4>
+                                    <p>{{ announcement.content[:100] }}...</p>
+                                    <span class="announcement-date">{{ announcement.date }}</span>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Quick Actions -->
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-tools"></i> Quick Actions</h3>
+                    </div>
+                    <div class="card-content">
+                        <div class="action-list">
+                            <a href="#" class="action-item">
+                                <i class="fas fa-calendar-alt"></i>
+                                <span>View Schedule</span>
+                            </a>
+                            <a href="#" class="action-item">
+                                <i class="fas fa-file-alt"></i>
+                                <span>Submit Assignment</span>
+                            </a>
+                            <a href="{{ url_for('results') }}" class="action-item">
+                                <i class="fas fa-chart-bar"></i>
+                                <span>View Results</span>
+                            </a>
+                            <a href="#" class="action-item">
+                                <i class="fas fa-envelope"></i>
+                                <span>Contact Teacher</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Profile Summary -->
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-user"></i> Profile Summary</h3>
+                        <a href="{{ url_for('profile') }}" class="btn btn-primary btn-sm">View Profile</a>
+                    </div>
+                    <div class="card-content">
+                        <div class="profile-summary">
+                            <div class="profile-avatar">
+                                <i class="fas fa-user-graduate"></i>
+                            </div>
+                            <div class="profile-info">
+                                <h4>{{ student.name }}</h4>
+                                <p><strong>Grade:</strong> {{ student.grade }}</p>
+                                <p><strong>GPA:</strong> {{ student.gpa }}</p>
+                                <p><strong>Student ID:</strong> {{ student.id }}</p>
+                                <p><strong>Email:</strong> {{ student.email }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

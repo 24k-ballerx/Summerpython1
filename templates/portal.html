@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+
+{% block title %}Home - Someret College Portal{% endblock %}
+
+{% block content %}
+<div class="hero-section">
+    <div class="hero-content">
+        <h1>Welcome to Somerset College</h1>
+        <p>Education a life pivot</p>
+        <div class="hero-buttons">
+            <a href="{{ url_for('students_page') }}" class="btn btn-primary">View Students</a>
+            <a href="{{ url_for('courses_page') }}" class="btn btn-secondary">Explore Courses</a>
+        </div>
+    </div>
+</div>
+
+<div class="features-section">
+    <div class="container">
+        <h2 class="section-title">Why Choose Somerset College?</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-graduation-cap"></i>
+                </div>
+                <h3>Academic Excellence</h3>
+                <p>Consistently high academic standards with a focus on student success and achievement.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <h3>Expert Faculty</h3>
+                <p>Experienced and dedicated teachers committed to nurturing student potential.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-laptop"></i>
+                </div>
+                <h3>Modern Facilities</h3>
+                <p>State-of-the-art classrooms, laboratories, and technology resources.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-heart"></i>
+                </div>
+                <h3>Student Support</h3>
+                <p>Comprehensive support services to ensure every student thrives.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="announcements-section">
+    <div class="container">
+        <h2 class="section-title">Latest Announcements</h2>
+        <div class="announcements-grid">
+            {% for announcement in announcements[:3] %}
+            <div class="announcement-card">
+                <div class="announcement-header">
+                    <h3>{{ announcement.title }}</h3>
+                    <span class="announcement-date">{{ announcement.date }}</span>
+                </div>
+                <p>{{ announcement.content }}</p>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="text-center">
+            <a href="{{ url_for('announcements_page') }}" class="btn btn-outline">View All Announcements</a>
+        </div>
+    </div>
+</div>
+
+<div class="stats-section">
+    <div class="container">
+        <div class="stats-grid">
+            <div class="stat-item">
+                <div class="stat-number">500+</div>
+                <div class="stat-label">Students</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">50+</div>
+                <div class="stat-label">Teachers</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">30+</div>
+                <div class="stat-label">Courses</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">95%</div>
+                <div class="stat-label">Success Rate</div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
