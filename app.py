@@ -4,7 +4,8 @@ from datetime import datetime
 import random
 
 app = Flask(__name__)
-app.secret_key = 'somerset_college_secret_key_2024'
+# Use environment variable for secret key in production; fallback for local dev
+app.secret_key = os.environ.get('SECRET_KEY', 'somerset_college_secret_key_2024')
 
 # Subjects (20)
 subjects = [
@@ -143,7 +144,7 @@ def get_user_by_id(user_id, user_type):
 
 @app.route('/')
 def home():
-    return render_template('landing.html')
+    return render_template('index.html')
 
 @app.route('/signin')
 def signin():
