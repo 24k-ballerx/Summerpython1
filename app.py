@@ -7,8 +7,31 @@ app = Flask(__name__)
 # Use environment variable for secret key in production; fallback for local dev
 app.secret_key = os.environ.get('SECRET_KEY', 'somerset_college_secret_key_2024')
 
-# Subjects (20)
-subjects = [
+# Nigerian Educational Scheme Subjects
+# Core subjects for all levels
+core_subjects = [
+    'English Language',
+    'Mathematics',
+    'Basic Science',
+    'Basic Technology',
+    'Social Studies',
+    'Civic Education',
+    'Christian Religious Studies',
+    'Islamic Religious Studies',
+    'Cultural and Creative Arts',
+    'Physical and Health Education',
+    'Computer Studies',
+    'Agricultural Science',
+    'Home Economics',
+    'Business Studies',
+    'French',
+    'Hausa',
+    'Yoruba',
+    'Igbo'
+]
+
+# Senior Secondary subjects (SS1-SS3)
+ss_subjects = [
     'English Language',
     'Mathematics',
     'Biology',
@@ -25,54 +48,115 @@ subjects = [
     'History',
     'Commerce',
     'Christian Religious Studies',
+    'Islamic Religious Studies',
     'Fine Arts',
     'Physical Education',
     'Music',
-    'French'
+    'French',
+    'Hausa',
+    'Yoruba',
+    'Igbo',
+    'Food and Nutrition',
+    'Technical Drawing',
+    'Woodwork',
+    'Metalwork',
+    'Electronics',
+    'Auto Mechanics'
 ]
 
 # Classes (JSS1–JSS3 and SS1–SS3)
 classes = ['JSS1', 'JSS2', 'JSS3', 'SS1', 'SS2', 'SS3']
 
-# Generate Teachers (30)
+# Generate Teachers for Nigerian Educational Scheme
 teachers = []
-for i in range(1, 31):
-    teacher_id = i
-    teacher_name = f"Teacher {i:03d}"
-    subject = subjects[(i - 1) % len(subjects)]
+
+# Create teachers for core subjects (JSS)
+core_teacher_id = 1
+for subject in core_subjects:
+    teacher_name = f"Teacher {core_teacher_id:03d}"
     teachers.append({
-        'id': teacher_id,
+        'id': core_teacher_id,
         'name': teacher_name,
         'subject': subject,
+        'level': 'JSS',
         'email': f"{teacher_name.lower().replace(' ', '')}@someret.edu",
-        'username': f"teacher{i:03d}",
+        'username': f"teacher{core_teacher_id:03d}",
         'password': 'teacher123'
     })
+    core_teacher_id += 1
 
-# Generate Courses from subjects (20)
+# Create teachers for SS subjects
+for subject in ss_subjects:
+    # Skip if teacher already exists for this subject
+    if not any(t['subject'] == subject for t in teachers):
+        teacher_name = f"Teacher {core_teacher_id:03d}"
+        teachers.append({
+            'id': core_teacher_id,
+            'name': teacher_name,
+            'subject': subject,
+            'level': 'SS',
+            'email': f"{teacher_name.lower().replace(' ', '')}@someret.edu",
+            'username': f"teacher{core_teacher_id:03d}",
+            'password': 'teacher123'
+        })
+        core_teacher_id += 1
+
+# Generate Courses according to Nigerian Educational Scheme
 courses = []
-for idx, subject in enumerate(subjects, start=1):
-    # Assign a teacher who teaches this subject if available; otherwise any teacher
-    subject_teachers = [t for t in teachers if t['subject'] == subject]
-    assigned_teacher = subject_teachers[idx % len(subject_teachers)] if subject_teachers else teachers[(idx - 1) % len(teachers)]
+
+# JSS Courses (Core subjects)
+jss_course_id = 1
+for subject in core_subjects:
+    # Find teacher for this subject
+    subject_teachers = [t for t in teachers if t['subject'] == subject and t['level'] == 'JSS']
+    assigned_teacher = subject_teachers[0] if subject_teachers else teachers[0]
+    
     courses.append({
-        'id': idx,
+        'id': jss_course_id,
         'name': subject,
+        'level': 'JSS',
         'teacher': assigned_teacher['name'],
-        'credits': random.choice([2, 3, 4]),
+        'credits': 2,
+        'students': random.randint(30, 80)
+    })
+    jss_course_id += 1
+
+# SS Courses (Senior Secondary subjects)
+for subject in ss_subjects:
+    # Find teacher for this subject
+    subject_teachers = [t for t in teachers if t['subject'] == subject and t['level'] == 'SS']
+    assigned_teacher = subject_teachers[0] if subject_teachers else teachers[0]
+    
+    courses.append({
+        'id': jss_course_id,
+        'name': subject,
+        'level': 'SS',
+        'teacher': assigned_teacher['name'],
+        'credits': 3,
         'students': random.randint(20, 60)
     })
+    jss_course_id += 1
 
 # Generate Students (500 + 70 more = 570)
 students = []
 for i in range(1, 571):
     student_name = f"Student {i:03d}"
-    enrolled_courses = random.sample(subjects, k=6)
+    grade = random.choice(classes)
+    
+    # Assign appropriate courses based on grade level
+    if grade.startswith('JSS'):
+        # JSS students take core subjects
+        enrolled_courses = random.sample(core_subjects, k=min(8, len(core_subjects)))
+    else:
+        # SS students take a mix of core and SS subjects
+        ss_core = ['English Language', 'Mathematics', 'Biology', 'Chemistry', 'Physics']
+        ss_elective = random.sample([s for s in ss_subjects if s not in ss_core], k=3)
+        enrolled_courses = ss_core + ss_elective
+    
     students.append({
         'id': i,
         'name': student_name,
-        'grade': random.choice(classes),
-        'gpa': round(random.uniform(2.0, 4.0), 1),
+        'grade': grade,
         'courses': enrolled_courses,
         'username': f"student{i:03d}",
         'password': 'student123',
@@ -108,13 +192,54 @@ for index, idx in enumerate(remaining_indices):
 ## Courses generated above
 
 announcements = [
-    {'id': 1, 'title': 'Parent-Teacher Conference', 'content': 'Parent-teacher conferences will be held on November 15th, 2024.', 'date': '2024-11-01'},
-    {'id': 2, 'title': 'Sports Day', 'content': 'Annual sports day will be celebrated on December 5th, 2024.', 'date': '2024-11-15'},
-    {'id': 3, 'title': 'Exam Schedule', 'content': 'Mid-term examinations will begin from November 20th, 2024.', 'date': '2024-11-10'}
+    {'id': 1, 'title': 'Parent-Teacher Conference', 'content': 'Parent-teacher conferences will be held on November 15th, 2025.', 'date': '2025-11-01'},
+    {'id': 2, 'title': 'Sports Day', 'content': 'Annual sports day will be celebrated on December 5th, 2025.', 'date': '2025-11-15'},
+    {'id': 3, 'title': 'Exam Schedule', 'content': 'Mid-term examinations will begin from November 20th, 2025.', 'date': '2025-11-10'}
 ]
 
-# Semester Results Data (left empty for generated dataset)
+# Semester Results Data (auto-generated per student)
+def compute_grade(total_score):
+    if total_score >= 75:
+        return 'A'
+    if total_score >= 65:
+        return 'B'
+    if total_score >= 55:
+        return 'C'
+    if total_score >= 45:
+        return 'D'
+    if total_score >= 40:
+        return 'E'
+    return 'F'
+
+def find_teacher_name_for_subject(subject_name):
+    for t in teachers:
+        if t['subject'] == subject_name:
+            return t['name']
+    return 'Teacher TBD'
+
 semester_results = {}
+current_semester = 'First Term 2025'
+
+for student in students:
+    student_courses_results = []
+    for subject_name in student['courses']:
+        # Midterm out of 40, Exam out of 60
+        midterm_score = random.randint(18, 40)
+        exam_score = random.randint(35, 60)
+        total_score = midterm_score + exam_score
+        student_courses_results.append({
+            'name': subject_name,
+            'teacher': find_teacher_name_for_subject(subject_name),
+            'midterm': midterm_score,
+            'exam': exam_score,
+            'total': total_score,
+            'grade': compute_grade(total_score)
+        })
+
+    semester_results[student['id']] = {
+        'semester': current_semester,
+        'courses': student_courses_results
+    }
 
 def get_user_by_username(username):
     """Find user by username in students or teachers"""
@@ -191,7 +316,7 @@ def dashboard():
     elif user_type == 'student':
         user_id = session.get('user_id')
         student = get_user_by_id(user_id, 'student')
-        return render_template('student_dashboard.html', 
+        return render_template('student_home.html', 
                              student=student, 
                              announcements=announcements)
     else:
@@ -258,7 +383,7 @@ def login():
             session['username'] = username
             session['user_id'] = 0
             session['user_type'] = 'admin'
-            session['user_name'] = 'Administrator'
+            session['user_name'] = 'Mr.OLANREWAJU BELLO'
             flash('Admin login successful!', 'success')
             return redirect(url_for('dashboard'))
         
@@ -283,6 +408,36 @@ def logout():
     flash('You have been logged out.', 'info')
     return redirect(url_for('home'))
 
+@app.route('/student-home')
+def student_home():
+    if not session.get('logged_in') or session.get('user_type') != 'student':
+        flash('Please log in as a student to access this page.', 'error')
+        return redirect(url_for('signin'))
+    
+    user_id = session.get('user_id')
+    student = get_user_by_id(user_id, 'student')
+    if not student:
+        flash('Student not found.', 'error')
+        return redirect(url_for('home'))
+    
+    return render_template('student_home.html', student=student)
+
+@app.route('/student-dashboard')
+def student_dashboard():
+    if not session.get('logged_in') or session.get('user_type') != 'student':
+        flash('Please log in as a student to access this page.', 'error')
+        return redirect(url_for('signin'))
+    
+    user_id = session.get('user_id')
+    student = get_user_by_id(user_id, 'student')
+    if not student:
+        flash('Student not found.', 'error')
+        return redirect(url_for('home'))
+    
+    return render_template('student_dashboard.html', 
+                         student=student, 
+                         announcements=announcements)
+
 @app.route('/profile')
 def profile():
     if not session.get('logged_in'):
@@ -293,7 +448,7 @@ def profile():
     user_type = session.get('user_type')
     
     if user_type == 'admin':
-        user_data = {'name': 'Administrator', 'type': 'admin'}
+        user_data = {'name': 'Mr.OLANREWAJU BELLO', 'type': 'admin'}
     else:
         user_data = get_user_by_id(user_id, user_type)
         if not user_data:

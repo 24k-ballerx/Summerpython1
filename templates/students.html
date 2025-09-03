@@ -40,7 +40,7 @@
                     <div class="student-info">
                         <h3>{{ student.name }}</h3>
                         <p class="student-grade">{{ student.grade }} Grade</p>
-                        <p class="student-gpa">GPA: {{ student.gpa }}</p>
+                        <p class="student-gpa">Courses: {{ student.courses|length }}</p>
                         <div class="student-courses">
                             <h4>Courses:</h4>
                             <ul>
@@ -58,7 +58,12 @@
         </div>
         {% else %}
         {% for c in classes %}
-            {% set class_students = students | selectattr('grade', 'equalto', c) | list %}
+            {% set class_students = [] %}
+            {% for student in students %}
+                {% if student.grade == c %}
+                    {% set _ = class_students.append(student) %}
+                {% endif %}
+            {% endfor %}
             <h2 style="margin-top: 24px;">{{ c }} <span style="font-weight: normal; color: #666;">({{ class_students|length }})</span></h2>
             <div class="students-grid">
                 {% if class_students and class_students|length > 0 %}
@@ -70,7 +75,7 @@
                         <div class="student-info">
                             <h3>{{ student.name }}</h3>
                             <p class="student-grade">{{ student.grade }} Grade</p>
-                            <p class="student-gpa">GPA: {{ student.gpa }}</p>
+                            <p class="student-gpa">Courses: {{ student.courses|length }}</p>
                             <div class="student-courses">
                                 <h4>Courses:</h4>
                                 <ul>

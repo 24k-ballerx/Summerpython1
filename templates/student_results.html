@@ -10,102 +10,56 @@
             <p>{{ results.semester }} - {{ student.name }}</p>
         </div>
         
-        <!-- Overall Performance Summary -->
+        <!-- Summary (Term and counts) -->
         <div class="performance-summary">
             <div class="summary-card">
                 <div class="summary-icon">
-                    <i class="fas fa-chart-line"></i>
+                    <i class="fas fa-calendar"></i>
                 </div>
                 <div class="summary-info">
-                    <h3>Overall GPA</h3>
-                    <p class="gpa-score">{{ results.overall_gpa }}</p>
-                    <span class="gpa-scale">/ 4.0</span>
+                    <h3>Term</h3>
+                    <p class="gpa-score">{{ results.semester }}</p>
                 </div>
             </div>
-            
             <div class="summary-card">
                 <div class="summary-icon">
-                    <i class="fas fa-graduation-cap"></i>
+                    <i class="fas fa-list"></i>
                 </div>
                 <div class="summary-info">
-                    <h3>Total Credits</h3>
-                    <p class="credits-score">{{ results.total_credits }}</p>
-                    <span class="credits-label">Credits</span>
-                </div>
-            </div>
-            
-            <div class="summary-card">
-                <div class="summary-icon">
-                    <i class="fas fa-calendar-check"></i>
-                </div>
-                <div class="summary-info">
-                    <h3>Attendance Rate</h3>
-                    <p class="attendance-score">{{ results.performance_summary.attendance_rate }}%</p>
-                    <span class="attendance-label">Present</span>
-                </div>
-            </div>
-            
-            <div class="summary-card">
-                <div class="summary-icon">
-                    <i class="fas fa-tasks"></i>
-                </div>
-                <div class="summary-info">
-                    <h3>Assignments</h3>
-                    <p class="assignments-score">{{ results.performance_summary.assignments_completed }}/{{ results.performance_summary.total_assignments }}</p>
-                    <span class="assignments-label">Completed</span>
+                    <h3>Subjects</h3>
+                    <p class="credits-score">{{ results.courses|length }}</p>
                 </div>
             </div>
         </div>
         
-        <!-- Course Results -->
+        <!-- Course Results Table (Midterm / Exam / Total / Grade) -->
         <div class="course-results">
-            <h2>Course Results</h2>
-            <div class="courses-grid">
-                {% for course in results.courses %}
-                <div class="course-result-card">
-                    <div class="course-header">
-                        <div class="course-icon">
-                            <i class="fas fa-book"></i>
-                        </div>
-                        <div class="course-info">
-                            <h3>{{ course.name }}</h3>
-                            <p>{{ course.teacher }}</p>
-                            <span class="credits">{{ course.credits }} credits</span>
-                        </div>
-                        <div class="grade-badge grade-{{ course.grade.lower().replace('+', '-plus').replace('-', '-minus') }}">
-                            {{ course.grade }}
-                        </div>
-                    </div>
-                    
-                    <div class="course-performance">
-                        <div class="performance-bar">
-                            <div class="bar-label">Performance</div>
-                            <div class="progress-bar">
-                                <span class="progress" style="width: {{ course.percentage }}%"></span>
-                            </div>
-                            <div class="percentage">{{ course.percentage }}%</div>
-                        </div>
-                    </div>
-                    
-                    <div class="assignments-breakdown">
-                        <h4>Assignment Breakdown</h4>
-                        <div class="assignments-list">
-                            {% for assignment in course.assignments %}
-                            <div class="assignment-item">
-                                <div class="assignment-info">
-                                    <span class="assignment-name">{{ assignment.name }}</span>
-                                    <span class="assignment-weight">({{ assignment.weight }}%)</span>
-                                </div>
-                                <div class="assignment-score">
-                                    <span class="score">{{ assignment.score }}/{{ assignment.max_score }}</span>
-                                    <span class="percentage">({{ (assignment.score / assignment.max_score * 100) | round(1) }}%)</span>
-                                </div>
-                            </div>
-                            {% endfor %}
-                        </div>
-                    </div>
-                </div>
-                {% endfor %}
+            <h2>Subject Results</h2>
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Subject</th>
+                            <th>Teacher</th>
+                            <th>Midterm (40)</th>
+                            <th>Exams (60)</th>
+                            <th>Total (100)</th>
+                            <th>Grade</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for course in results.courses %}
+                        <tr>
+                            <td>{{ course.name }}</td>
+                            <td>{{ course.teacher }}</td>
+                            <td>{{ course.midterm }}</td>
+                            <td>{{ course.exam }}</td>
+                            <td>{{ course.total }}</td>
+                            <td>{{ course.grade }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
             </div>
         </div>
         
@@ -142,46 +96,7 @@
             </div>
         </div>
         
-        <!-- GPA Trend Chart -->
-        <div class="gpa-trend">
-            <div class="trend-card">
-                <div class="card-header">
-                    <h3><i class="fas fa-chart-area"></i> GPA Trend</h3>
-                </div>
-                <div class="card-content">
-                    <div class="trend-chart">
-                        <div class="chart-container">
-                            <div class="chart-bar" style="height: 75%">
-                                <span class="bar-label">Previous</span>
-                                <span class="bar-value">3.6</span>
-                            </div>
-                            <div class="chart-bar current" style="height: {{ (results.overall_gpa / 4.0) * 100 }}%">
-                                <span class="bar-label">Current</span>
-                                <span class="bar-value">{{ results.overall_gpa }}</span>
-                            </div>
-                            <div class="chart-bar" style="height: 80%">
-                                <span class="bar-label">Target</span>
-                                <span class="bar-value">3.8</span>
-                            </div>
-                        </div>
-                        <div class="chart-legend">
-                            <div class="legend-item">
-                                <span class="legend-color previous"></span>
-                                <span>Previous Semester</span>
-                            </div>
-                            <div class="legend-item">
-                                <span class="legend-color current"></span>
-                                <span>Current Semester</span>
-                            </div>
-                            <div class="legend-item">
-                                <span class="legend-color target"></span>
-                                <span>Target GPA</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <!-- Removed GPA Trend for simplicity -->
         
         <!-- Action Buttons -->
         <div class="results-actions">

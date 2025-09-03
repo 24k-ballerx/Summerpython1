@@ -38,8 +38,8 @@
                                 <span class="detail-value">{{ user.grade }}</span>
                             </div>
                             <div class="detail-item">
-                                <span class="detail-label">GPA:</span>
-                                <span class="detail-value">{{ user.gpa }}</span>
+                                                <span class="detail-label">Courses:</span>
+                <span class="detail-value">{{ user.courses|length if user.courses else 'N/A' }}</span>
                             </div>
                             <div class="detail-item">
                                 <span class="detail-label">Email:</span>
